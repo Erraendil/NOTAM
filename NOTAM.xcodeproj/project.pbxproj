@@ -58,14 +58,10 @@
 		B30EA4281CDDD34E0052681D /* NOTAM */ = {
 			isa = PBXGroup;
 			children = (
-				B30EA42C1CDDD34E0052681D /* AppDelegate.h */,
-				B30EA42D1CDDD34E0052681D /* AppDelegate.m */,
-				B30EA42F1CDDD34E0052681D /* ViewController.h */,
-				B30EA4301CDDD34E0052681D /* ViewController.m */,
-				B30EA4321CDDD34E0052681D /* Main.storyboard */,
 				B30EA4351CDDD34E0052681D /* Assets.xcassets */,
-				B30EA4371CDDD34E0052681D /* LaunchScreen.storyboard */,
-				B30EA43A1CDDD34E0052681D /* Info.plist */,
+				B30EA4421CDDDE0B0052681D /* Model */,
+				B30EA4411CDDDE040052681D /* View */,
+				B30EA4401CDDDDF80052681D /* Controller */,
 				B30EA4291CDDD34E0052681D /* Supporting Files */,
 			);
 			path = NOTAM;
@@ -74,9 +70,37 @@
 		B30EA4291CDDD34E0052681D /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				B30EA43A1CDDD34E0052681D /* Info.plist */,
 				B30EA42A1CDDD34E0052681D /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		B30EA4401CDDDDF80052681D /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				B30EA42C1CDDD34E0052681D /* AppDelegate.h */,
+				B30EA42D1CDDD34E0052681D /* AppDelegate.m */,
+				B30EA42F1CDDD34E0052681D /* ViewController.h */,
+				B30EA4301CDDD34E0052681D /* ViewController.m */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		B30EA4411CDDDE040052681D /* View */ = {
+			isa = PBXGroup;
+			children = (
+				B30EA4321CDDD34E0052681D /* Main.storyboard */,
+				B30EA4371CDDD34E0052681D /* LaunchScreen.storyboard */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		B30EA4421CDDDE0B0052681D /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
