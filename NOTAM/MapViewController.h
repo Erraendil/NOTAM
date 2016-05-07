@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
+@interface MapViewController : UIViewController <CLLocationManagerDelegate>
 
+@property (weak, nonatomic) IBOutlet GMSMapView *mapView;
 
 @end
 

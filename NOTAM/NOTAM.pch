@@ -1,0 +1,17 @@
+//
+//  NOTAM.pch
+//  NOTAM
+//
+//  Created by Kostyantyn Bilyk on 07.05.16.
+//  Copyright © 2016 Kostyantyn Bilyk. All rights reserved.
+//
+
+#ifndef NOTAM_pch
+#define NOTAM_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+@import GoogleMaps;
+#import "define.m"
+
+#endif /* NOTAM_pch */
