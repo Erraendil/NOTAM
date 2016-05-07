@@ -26,6 +26,20 @@
     
     // Set Initial Position for Map View with Current Location Marker
     [self initMapViewWithCurrentLocationMarker];
+    
+    self.searchBar.delegate = self;
+    self.mapView.delegate = self;
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    // register for keyboard notifications
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillChange:)
+                                                 name:UIKeyboardWillChangeFrameNotification
+                                               object:nil];
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -74,6 +88,10 @@
     marker.map = self.mapView;
 }
 
+- (void)mapView:(GMSMapView *)mapView didTapAtCoordinate:(CLLocationCoordinate2D)coordinate{
+    [self.view endEditing:YES];
+}
+
 #pragma mark - Location Manager
 
 - (void)initLocationManager{
@@ -90,11 +108,49 @@
     }
 }
 
-- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
+#pragma mark - Search Bar
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
+    [self.view endEditing:YES];
+}
+
+#pragma mark – Keyboard
+
+- (void)keyboardWillChange:(NSNotification *)notification {
     
+    // Animate the current view out of the way
+    [self moveViewForKeyboardNotification:notification];
 }
 
 
+- (void)moveViewForKeyboardNotification:(NSNotification *)notification{
+    NSDictionary* userInfo = [notification userInfo];
+    
+    // Get animation info from userInfo
+    NSTimeInterval animationDuration;
+    UIViewAnimationCurve animationCurve;
+    
+    CGRect keyboardEndFrame;
+    
+    [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] getValue:&animationCurve];
+    [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&animationDuration];
+    
+    
+    [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] getValue:&keyboardEndFrame];
+    
+    // Animate up or down
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:animationDuration];
+    [UIView setAnimationCurve:animationCurve];
+    
+    CGRect newFrame = self.view.frame;
+    CGRect keyboardFrame = [self.view convertRect:keyboardEndFrame toView:nil];
+    
+    newFrame.origin.y -= keyboardFrame.size.height * (self.view.frame.origin.y < 0 ? -1 : 1);
+    self.view.frame = newFrame;
+    
+    [UIView commitAnimations];
+}
 
 @end

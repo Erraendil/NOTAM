@@ -20,11 +20,25 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Tyz-c9-RFf" userLabel="Map View" customClass="GMSMapView">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="b86-GC-6QF" appends="YES" id="AeT-Zy-FTN"/>
+                                </connections>
                             </view>
+                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="PCf-Ms-E19">
+                                <rect key="frame" x="0.0" y="556" width="600" height="44"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="0sG-4l-Dva"/>
+                                </connections>
+                            </searchBar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="PCf-Ms-E19" secondAttribute="bottom" id="1Sf-Mu-3tm"/>
+                            <constraint firstAttribute="trailing" secondItem="PCf-Ms-E19" secondAttribute="trailing" id="C5Z-bx-nqW"/>
                             <constraint firstAttribute="trailing" secondItem="Tyz-c9-RFf" secondAttribute="trailing" id="CVV-3P-iwP"/>
+                            <constraint firstItem="PCf-Ms-E19" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="HSJ-PA-Cir"/>
                             <constraint firstItem="Tyz-c9-RFf" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="Wv3-jK-He2"/>
                             <constraint firstItem="Tyz-c9-RFf" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="b8M-QP-iys"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="Tyz-c9-RFf" secondAttribute="bottom" id="rBp-lY-jiR"/>
@@ -32,9 +46,15 @@
                     </view>
                     <connections>
                         <outlet property="mapView" destination="Tyz-c9-RFf" id="H11-kU-ogE"/>
+                        <outlet property="searchBar" destination="PCf-Ms-E19" id="83m-Zx-Y2R"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="b86-GC-6QF">
+                    <connections>
+                        <action selector="mapTap:" destination="BYZ-38-t0r" id="GnL-LD-aKq"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="325" y="400"/>
         </scene>
