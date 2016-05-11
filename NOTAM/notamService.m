@@ -282,8 +282,8 @@ request:(NSString *)aRequest
 									//NSAssert1(bodyObject != nil, @"Errors while parsing body %s", bodyNode->name);
 									if (bodyObject != nil) [responseBodyParts addObject:bodyObject];
 								}
-								if (xmlStrEqual(bodyNode->ns->prefix, cur->ns->prefix) && 
-									xmlStrEqual(bodyNode->name, (const xmlChar *) "Fault")) {
+                                else if (xmlStrEqual(bodyNode->ns->prefix, (const xmlChar *) "soap") &&
+                                         xmlStrEqual(bodyNode->name, (const xmlChar *) "Fault")) {
 									SOAPFault *bodyObject = [SOAPFault deserializeNode:bodyNode];
 									//NSAssert1(bodyObject != nil, @"Errors while parsing body %s", bodyNode->name);
 									if (bodyObject != nil) [responseBodyParts addObject:bodyObject];

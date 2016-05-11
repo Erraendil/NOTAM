@@ -7,7 +7,6 @@
 //
 
 #import "MapViewController.h"
-#import <CoreLocation/CoreLocation.h>
 
 @interface MapViewController (){
     CLLocationManager *locationManager;
@@ -113,8 +112,22 @@
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
     [self.view endEditing:YES];
+    [self performSearchAction];
 }
 
+- (void)performSearchAction{
+    notamBinding *binding = [notamService notamBinding];
+    
+    NSString *soapMessage = [NSString stringWithFormat:NOTAM_REQUEST_STRING, self.searchBar.text];
+    
+    [binding getNotamAsyncUsingRequest:soapMessage
+                              delegate:self];
+    
+}
+
+- (void)operation:(notamBindingOperation *)operation completedWithResponse:(notamBindingResponse *)response{
+    DLog(@"Responce: %@", [response.bodyParts objectAtIndex:0]);
+}
 #pragma mark – Keyboard
 
 - (void)keyboardWillChange:(NSNotification *)notification {

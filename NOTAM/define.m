@@ -22,3 +22,12 @@
 #define GOOGLE_MAPS_INITIAL_ZOOM @6
 #define GOOGLE_MAPS_INITIAL_LATITUDE 49.8333333
 #define GOOGLE_MAPS_INITIAL_LONGTITUDE 24
+
+#pragma mark – NOTAM
+
+#define NOTAM_REQUEST_STRING @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"\
+"<REQNOTAM>"\
+"<USR>kos.bilyk@gmail.com</USR>"\
+"<PASSWD>a8cfe0bd7dd07badfa57f64c97b7d7e3</PASSWD>"\
+"<ICAO>%@</ICAO>"\
+"</REQNOTAM>"
