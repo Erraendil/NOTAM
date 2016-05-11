@@ -14,6 +14,12 @@
 		B30EA4341CDDD34E0052681D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B30EA4321CDDD34E0052681D /* Main.storyboard */; };
 		B30EA4361CDDD34E0052681D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B30EA4351CDDD34E0052681D /* Assets.xcassets */; };
 		B30EA4391CDDD34E0052681D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B30EA4371CDDD34E0052681D /* LaunchScreen.storyboard */; };
+		B338331A1CE3D0C100AE882A /* notamService.m in Sources */ = {isa = PBXBuildFile; fileRef = B338330F1CE3D0C100AE882A /* notamService.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		B338331B1CE3D0C100AE882A /* NSDate+ISO8601Parsing.m in Sources */ = {isa = PBXBuildFile; fileRef = B33833111CE3D0C100AE882A /* NSDate+ISO8601Parsing.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		B338331C1CE3D0C100AE882A /* NSDate+ISO8601Unparsing.m in Sources */ = {isa = PBXBuildFile; fileRef = B33833131CE3D0C100AE882A /* NSDate+ISO8601Unparsing.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		B338331D1CE3D0C100AE882A /* USAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = B33833151CE3D0C100AE882A /* USAdditions.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		B338331E1CE3D0C100AE882A /* USGlobals.m in Sources */ = {isa = PBXBuildFile; fileRef = B33833171CE3D0C100AE882A /* USGlobals.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		B338331F1CE3D0C100AE882A /* xsd.m in Sources */ = {isa = PBXBuildFile; fileRef = B33833191CE3D0C100AE882A /* xsd.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		B35F5EC21CDDEC8000F8A20B /* define.m in Sources */ = {isa = PBXBuildFile; fileRef = B35F5EC11CDDEC8000F8A20B /* define.m */; };
 		B35F5EC71CDDF1FB00F8A20B /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B35F5EC61CDDF1FB00F8A20B /* CoreLocation.framework */; };
 /* End PBXBuildFile section */
@@ -32,6 +38,18 @@
 		B30EA4351CDDD34E0052681D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B30EA4381CDDD34E0052681D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B30EA43A1CDDD34E0052681D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B338330E1CE3D0C100AE882A /* notamService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = notamService.h; sourceTree = "<group>"; };
+		B338330F1CE3D0C100AE882A /* notamService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = notamService.m; sourceTree = "<group>"; };
+		B33833101CE3D0C100AE882A /* NSDate+ISO8601Parsing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+ISO8601Parsing.h"; sourceTree = "<group>"; };
+		B33833111CE3D0C100AE882A /* NSDate+ISO8601Parsing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+ISO8601Parsing.m"; sourceTree = "<group>"; };
+		B33833121CE3D0C100AE882A /* NSDate+ISO8601Unparsing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+ISO8601Unparsing.h"; sourceTree = "<group>"; };
+		B33833131CE3D0C100AE882A /* NSDate+ISO8601Unparsing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+ISO8601Unparsing.m"; sourceTree = "<group>"; };
+		B33833141CE3D0C100AE882A /* USAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = USAdditions.h; sourceTree = "<group>"; };
+		B33833151CE3D0C100AE882A /* USAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = USAdditions.m; sourceTree = "<group>"; };
+		B33833161CE3D0C100AE882A /* USGlobals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = USGlobals.h; sourceTree = "<group>"; };
+		B33833171CE3D0C100AE882A /* USGlobals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = USGlobals.m; sourceTree = "<group>"; };
+		B33833181CE3D0C100AE882A /* xsd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xsd.h; sourceTree = "<group>"; };
+		B33833191CE3D0C100AE882A /* xsd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = xsd.m; sourceTree = "<group>"; };
 		B35F5EC11CDDEC8000F8A20B /* define.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = define.m; sourceTree = "<group>"; };
 		B35F5EC31CDDED0F00F8A20B /* NOTAM.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NOTAM.pch; sourceTree = "<group>"; };
 		B35F5EC61CDDF1FB00F8A20B /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -112,6 +130,7 @@
 		B30EA4401CDDDDF80052681D /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				B338330D1CE3D0B300AE882A /* SOAP */,
 				B30EA42C1CDDD34E0052681D /* AppDelegate.h */,
 				B30EA42D1CDDD34E0052681D /* AppDelegate.m */,
 				B30EA42F1CDDD34E0052681D /* MapViewController.h */,
@@ -134,6 +153,25 @@
 			children = (
 			);
 			name = Model;
+			sourceTree = "<group>";
+		};
+		B338330D1CE3D0B300AE882A /* SOAP */ = {
+			isa = PBXGroup;
+			children = (
+				B338330E1CE3D0C100AE882A /* notamService.h */,
+				B338330F1CE3D0C100AE882A /* notamService.m */,
+				B33833101CE3D0C100AE882A /* NSDate+ISO8601Parsing.h */,
+				B33833111CE3D0C100AE882A /* NSDate+ISO8601Parsing.m */,
+				B33833121CE3D0C100AE882A /* NSDate+ISO8601Unparsing.h */,
+				B33833131CE3D0C100AE882A /* NSDate+ISO8601Unparsing.m */,
+				B33833141CE3D0C100AE882A /* USAdditions.h */,
+				B33833151CE3D0C100AE882A /* USAdditions.m */,
+				B33833161CE3D0C100AE882A /* USGlobals.h */,
+				B33833171CE3D0C100AE882A /* USGlobals.m */,
+				B33833181CE3D0C100AE882A /* xsd.h */,
+				B33833191CE3D0C100AE882A /* xsd.m */,
+			);
+			name = SOAP;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -257,10 +295,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B338331C1CE3D0C100AE882A /* NSDate+ISO8601Unparsing.m in Sources */,
+				B338331E1CE3D0C100AE882A /* USGlobals.m in Sources */,
+				B338331B1CE3D0C100AE882A /* NSDate+ISO8601Parsing.m in Sources */,
+				B338331F1CE3D0C100AE882A /* xsd.m in Sources */,
+				B338331A1CE3D0C100AE882A /* notamService.m in Sources */,
 				B30EA4311CDDD34E0052681D /* MapViewController.m in Sources */,
 				B30EA42E1CDDD34E0052681D /* AppDelegate.m in Sources */,
 				B35F5EC21CDDEC8000F8A20B /* define.m in Sources */,
 				B30EA42B1CDDD34E0052681D /* main.m in Sources */,
+				B338331D1CE3D0C100AE882A /* USAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -380,6 +424,50 @@
 				INFOPLIST_FILE = NOTAM/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-isystem",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"-isystem",
+					"\"${PODS_ROOT}/Headers/Public/GoogleMaps\"",
+					"-I/usr/include/libxml2",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"c++\"",
+					"-l\"icucore\"",
+					"-l\"z\"",
+					"-framework",
+					"\"AVFoundation\"",
+					"-framework",
+					"\"Accelerate\"",
+					"-framework",
+					"\"CoreBluetooth\"",
+					"-framework",
+					"\"CoreData\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"CoreLocation\"",
+					"-framework",
+					"\"CoreText\"",
+					"-framework",
+					"\"GLKit\"",
+					"-framework",
+					"\"GoogleMaps\"",
+					"-framework",
+					"\"ImageIO\"",
+					"-framework",
+					"\"OpenGLES\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-lxml2",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = kos.bilyk.NOTAM;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -395,6 +483,50 @@
 				INFOPLIST_FILE = NOTAM/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-isystem",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"-isystem",
+					"\"${PODS_ROOT}/Headers/Public/GoogleMaps\"",
+					"-I/usr/include/libxml2",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"c++\"",
+					"-l\"icucore\"",
+					"-l\"z\"",
+					"-framework",
+					"\"AVFoundation\"",
+					"-framework",
+					"\"Accelerate\"",
+					"-framework",
+					"\"CoreBluetooth\"",
+					"-framework",
+					"\"CoreData\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"CoreLocation\"",
+					"-framework",
+					"\"CoreText\"",
+					"-framework",
+					"\"GLKit\"",
+					"-framework",
+					"\"GoogleMaps\"",
+					"-framework",
+					"\"ImageIO\"",
+					"-framework",
+					"\"OpenGLES\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-lxml2",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = kos.bilyk.NOTAM;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
