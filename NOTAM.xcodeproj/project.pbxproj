@@ -86,6 +86,23 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		B30E28301CE757310008E478 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				B338330D1CE3D0B300AE882A /* SOAP */,
+			);
+			name = Managers;
+			sourceTree = "<group>";
+		};
+		B30E28311CE7573B0008E478 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				B30EA42F1CDDD34E0052681D /* MapViewController.h */,
+				B30EA4301CDDD34E0052681D /* MapViewController.m */,
+			);
+			name = "View Controllers";
+			sourceTree = "<group>";
+		};
 		B30EA41D1CDDD34E0052681D = {
 			isa = PBXGroup;
 			children = (
@@ -130,11 +147,10 @@
 		B30EA4401CDDDDF80052681D /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				B338330D1CE3D0B300AE882A /* SOAP */,
 				B30EA42C1CDDD34E0052681D /* AppDelegate.h */,
 				B30EA42D1CDDD34E0052681D /* AppDelegate.m */,
-				B30EA42F1CDDD34E0052681D /* MapViewController.h */,
-				B30EA4301CDDD34E0052681D /* MapViewController.m */,
+				B30E28301CE757310008E478 /* Managers */,
+				B30E28311CE7573B0008E478 /* View Controllers */,
 			);
 			name = Controller;
 			sourceTree = "<group>";

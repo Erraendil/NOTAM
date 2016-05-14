@@ -6,5 +6,6 @@
 target 'NOTAM' do
 
   pod 'GoogleMaps'
+  pod 'MBProgressHUD'
 
 end

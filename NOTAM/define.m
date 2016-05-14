@@ -16,6 +16,18 @@
 #define DLog(...) while(0)
 #endif
 
+#pragma mark - Singleton
+
+#define SINGLETON_FOR_CLASS(classname)\
++ (id) shared##classname {\
+static dispatch_once_t pred = 0;\
+__strong static id _sharedObject = nil;\
+dispatch_once(&pred, ^{\
+_sharedObject = [[self alloc] init];\
+});\
+return _sharedObject;\
+}
+
 #pragma mark – Google Maps
 
 #define GOOGLE_MAPS_API_KEY @"AIzaSyAEbcuoGfEoW0Ed66f2I6M0BaFcGRMYBWo"
@@ -23,11 +35,14 @@
 #define GOOGLE_MAPS_INITIAL_LATITUDE 49.8333333
 #define GOOGLE_MAPS_INITIAL_LONGTITUDE 24
 
-#pragma mark – NOTAM
+#pragma mark – API Manager
+
+#define ROKET_ROUTE_LOGIN @"kos.bilyk@gmail.com"
+#define ROKET_ROUTE_PWORD @"a8cfe0bd7dd07badfa57f64c97b7d7e3"
 
 #define NOTAM_REQUEST_STRING @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>"\
 "<REQNOTAM>"\
-"<USR>kos.bilyk@gmail.com</USR>"\
-"<PASSWD>a8cfe0bd7dd07badfa57f64c97b7d7e3</PASSWD>"\
+"<USR>%@</USR>"\
+"<PASSWD>%@</PASSWD>"\
 "<ICAO>%@</ICAO>"\
 "</REQNOTAM>"

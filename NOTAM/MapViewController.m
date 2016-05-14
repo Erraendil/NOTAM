@@ -116,18 +116,9 @@
 }
 
 - (void)performSearchAction{
-    notamBinding *binding = [notamService notamBinding];
-    
-    NSString *soapMessage = [NSString stringWithFormat:NOTAM_REQUEST_STRING, self.searchBar.text];
-    
-    [binding getNotamAsyncUsingRequest:soapMessage
-                              delegate:self];
-    
+    [self requestNOTAMWithAirportICAOCodeString:self.searchBar.text];
 }
 
-- (void)operation:(notamBindingOperation *)operation completedWithResponse:(notamBindingResponse *)response{
-    DLog(@"Responce: %@", [response.bodyParts objectAtIndex:0]);
-}
 #pragma mark – Keyboard
 
 - (void)keyboardWillChange:(NSNotification *)notification {
@@ -164,6 +155,27 @@
     self.view.frame = newFrame;
     
     [UIView commitAnimations];
+}
+
+#pragma mark - NOTAM
+
+- (void)requestNOTAMWithAirportICAOCodeString:(NSString *)string{
+    notamBinding *binding = [notamService notamBinding];
+    
+    NSString *soapRequest = [NSString stringWithFormat:
+                             NOTAM_REQUEST_STRING,
+                             ROKET_ROUTE_LOGIN,
+                             ROKET_ROUTE_PWORD,
+                             string];
+    
+    [binding getNotamAsyncUsingRequest:soapRequest
+                              delegate:self];
+}
+
+#pragma mark – NOTAM Binding Response Delegate
+
+- (void)operation:(notamBindingOperation *)operation completedWithResponse:(notamBindingResponse *)response{
+    DLog(@"Responce: %@", [response.bodyParts objectAtIndex:0]);
 }
 
 @end
