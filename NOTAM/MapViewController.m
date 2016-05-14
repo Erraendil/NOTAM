@@ -120,6 +120,7 @@
 
 - (void)performSearchAction{
     [self.mapView clear];
+    self.items = [NSMutableArray new];
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     [self requestNOTAMForAirportICAOCodeWithString:self.searchBar.text];
 }
@@ -240,6 +241,7 @@
     
     [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
     [self setNOTAMMarkersWithItemsArray:self.items];
+    
 }
 
 - (void)setNOTAMMarkersWithItemsArray:(NSArray *)array{
