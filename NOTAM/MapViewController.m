@@ -116,7 +116,7 @@
 }
 
 - (void)performSearchAction{
-    [self requestNOTAMWithAirportICAOCodeString:self.searchBar.text];
+    [self requestNOTAMForAirportICAOCodeWithString:self.searchBar.text];
 }
 
 #pragma mark – Keyboard
@@ -159,7 +159,7 @@
 
 #pragma mark - NOTAM
 
-- (void)requestNOTAMWithAirportICAOCodeString:(NSString *)string{
+- (void)requestNOTAMForAirportICAOCodeWithString:(NSString *)string{
     notamBinding *binding = [notamService notamBinding];
     
     NSString *soapRequest = [NSString stringWithFormat:
