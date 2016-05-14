@@ -14,31 +14,28 @@
 
 @interface NSString (USAdditions)
 
-- (NSString *)stringByEscapingXML;
-- (NSString *)stringByUnescapingXML;
-- (const xmlChar *)xmlString;
-- (xmlNodePtr)xmlNodeForDoc:(xmlDocPtr)doc elementName:(NSString *)elName elementNSPrefix:(NSString *)elNSPrefix;
+- (xmlNodePtr)xmlNodeForDoc:(xmlDocPtr)doc elementName:(NSString *)elName;
 + (NSString *)deserializeNode:(xmlNodePtr)cur;
 
 @end
 
 @interface NSNumber (USAdditions)
 
-- (xmlNodePtr)xmlNodeForDoc:(xmlDocPtr)doc elementName:(NSString *)elName elementNSPrefix:(NSString *)elNSPrefix;
+- (xmlNodePtr)xmlNodeForDoc:(xmlDocPtr)doc elementName:(NSString *)elName;
 + (NSNumber *)deserializeNode:(xmlNodePtr)cur;
 
 @end
 
 @interface NSDate (USAdditions)
 
-- (xmlNodePtr)xmlNodeForDoc:(xmlDocPtr)doc elementName:(NSString *)elName elementNSPrefix:(NSString *)elNSPrefix;
+- (xmlNodePtr)xmlNodeForDoc:(xmlDocPtr)doc elementName:(NSString *)elName;
 + (NSDate *)deserializeNode:(xmlNodePtr)cur;
 
 @end
 
 @interface NSData (USAdditions)
 
-- (xmlNodePtr)xmlNodeForDoc:(xmlDocPtr)doc elementName:(NSString *)elName elementNSPrefix:(NSString *)elNSPrefix;
+- (xmlNodePtr)xmlNodeForDoc:(xmlDocPtr)doc elementName:(NSString *)elName;
 + (NSData *)deserializeNode:(xmlNodePtr)cur;
 
 @end
@@ -50,7 +47,7 @@
 @end
 
 @interface USBoolean : NSObject {
-	BOOL value;
+    BOOL value;
 }
 
 @property (assign) BOOL boolValue;
@@ -58,16 +55,16 @@
 - (id)initWithBool:(BOOL)aValue;
 - (NSString *)stringValue;
 
-- (xmlNodePtr)xmlNodeForDoc:(xmlDocPtr)doc elementName:(NSString *)elName elementNSPrefix:(NSString *)elNSPrefix;
+- (xmlNodePtr)xmlNodeForDoc:(xmlDocPtr)doc elementName:(NSString *)elName;
 + (USBoolean *)deserializeNode:(xmlNodePtr)cur;
 
 @end
 
 @interface SOAPFault : NSObject {
-  NSString *faultcode;
-  NSString *faultstring;
-  NSString *faultactor;
-  NSString *detail;
+    NSString *faultcode;
+    NSString *faultstring;
+    NSString *faultactor;
+    NSString *detail;
 }
 
 @property (nonatomic, retain) NSString *faultcode;
