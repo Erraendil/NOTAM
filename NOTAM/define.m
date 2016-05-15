@@ -35,7 +35,11 @@ return _sharedObject;\
 #define GOOGLE_MAPS_INITIAL_LATITUDE 49.8333333
 #define GOOGLE_MAPS_INITIAL_LONGTITUDE 24
 
-#pragma mark – API Manager
+#pragma mark - Search
+
+#define AIRPORT_ICAO_CODE_PATTERN @"^[A-z]{4}$"
+
+#pragma mark – NOTAM
 
 #define ROKET_ROUTE_LOGIN @"kos.bilyk@gmail.com"
 #define ROKET_ROUTE_PWORD @"a8cfe0bd7dd07badfa57f64c97b7d7e3"

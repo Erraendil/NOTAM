@@ -119,10 +119,41 @@
 }
 
 - (void)performSearchAction{
-    [self.mapView clear];
-    self.items = [NSMutableArray new];
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    [self requestNOTAMForAirportICAOCodeWithString:self.searchBar.text];
+    if ([self isValidAirportICAOCodeWithString:self.searchBar.text]) {
+        [self.mapView clear];
+        self.items = [NSMutableArray new];
+        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        [self requestNOTAMForAirportICAOCodeWithString:self.searchBar.text];
+    } else {
+        self.searchBar.text = @"";
+    }
+}
+
+- (BOOL)isValidAirportICAOCodeWithString:(NSString *)string{
+    
+    NSString *pattern = AIRPORT_ICAO_CODE_PATTERN;
+    
+    NSMutableDictionary *userInfo = [NSMutableDictionary new];
+    NSString *errorLocalizedDescriptionString = @"ICAO Airport Code must contain 4 letters. Try again.";
+    [userInfo setValue:errorLocalizedDescriptionString forKey:NSLocalizedDescriptionKey];
+    
+    NSError *error = [NSError errorWithDomain:@"Search"
+                                         code:0
+                                     userInfo:userInfo];
+
+    
+    NSRegularExpression *regularExpression = [NSRegularExpression regularExpressionWithPattern:pattern
+                                                                                       options:0
+                                                                                         error:&error];
+    NSArray  *validCodes = [regularExpression matchesInString:string
+                                                      options:0
+                                                        range:NSMakeRange(0, [string length])];
+    if ([validCodes count] > 0) {
+        return YES;
+    } else {
+        [self presentErrorAlertWithError:error];
+    }
+    return NO;
 }
 
 #pragma mark – Keyboard
@@ -330,7 +361,7 @@
 #pragma mark - Alert
 
 - (void)presentErrorAlertWithError:(NSError *)error{
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"Error Code %i!", (int)error.code]
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Error!"
                                                                              message:error.localizedDescription
                                                                       preferredStyle:UIAlertControllerStyleAlert];
     
