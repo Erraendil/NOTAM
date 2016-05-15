@@ -282,6 +282,7 @@
                                     //NSAssert1(bodyObject != nil, @"Errors while parsing body %s", bodyNode->name);
                                     if (bodyObject != nil) [responseBodyParts addObject:bodyObject];
                                 }
+                                // Had to modify auto-generated class with "soap" prefix XML compare
                                 else if (xmlStrEqual(bodyNode->ns->prefix, (const xmlChar *) "soap") &&
                                          xmlStrEqual(bodyNode->name, (const xmlChar *) "Fault")) {
                                     SOAPFault *bodyObject = [SOAPFault deserializeNode:bodyNode];

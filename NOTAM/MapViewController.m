@@ -16,6 +16,19 @@
 
 @implementation MapViewController
 
+- (id)init{
+    if (!self) {
+        self = [super init];
+    }
+    
+    // Init Parameters
+    self.items = [NSMutableArray new];
+    self.parserError = nil;
+    self.currentXMLElement = @"";
+    
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
@@ -24,22 +37,20 @@
     [self initLocationManager];
     [self initMapViewWithCurrentLocation];
     
+    // Setup Delegates
     self.searchBar.delegate = self;
     self.mapView.delegate = self;
-    
-    self.items = [NSMutableArray new];
-    self.parserError = nil;
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    // register for keyboard notifications
+    
+    // Register for keyboard notifications
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillChange:)
                                                  name:UIKeyboardWillChangeFrameNotification
                                                object:nil];
-
 }
 
 - (void)didReceiveMemoryWarning {
@@ -55,10 +66,16 @@
 }
 
 - (CLLocation *)getCurrentLocation{
+    
+    // Create Location to return
     CLLocation *location = [CLLocation new];
+    
+    // Check if Location Manager can provide Curren Location
     if (locationManager.location) {
         location = locationManager.location;
     } else {
+        
+        // If Location Manager can't provide Current Location return Lviv Location
         location = [[CLLocation alloc] initWithLatitude:GOOGLE_MAPS_INITIAL_LATITUDE
                                               longitude:GOOGLE_MAPS_INITIAL_LONGTITUDE];
     }
@@ -73,7 +90,21 @@
 }
 
 - (void)mapView:(GMSMapView *)mapView didTapAtCoordinate:(CLLocationCoordinate2D)coordinate{
+    
+    // Hide Keyboard if User tap on Map
     [self.view endEditing:YES];
+}
+
+- (void)mapView:(GMSMapView *)mapView didTapInfoWindowOfMarker:(GMSMarker *)marker{
+    
+    // If NOTAM Info does not fit marker.snippet on tap Alert with full info is shown
+    if ([marker.snippet length] > 160 || [[marker.snippet componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]] count] > 3) {
+        
+        // Present NOTAM Info Details in Alert
+        [self presentAlertWithTitle:@"NOTAM Details"
+                             button:@"Ok"
+                         andMessage:marker.snippet];
+    }
 }
 
 #pragma mark - Location Manager
@@ -95,14 +126,20 @@
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations{
-    [self setMapViewCameraPositionWithLocation:[locations lastObject] andZoom:GOOGLE_MAPS_INITIAL_ZOOM];
+    
+    // Set Camera Location when Location Manager update location
+    [self setMapViewCameraPositionWithLocation:[locations lastObject]
+                                       andZoom:GOOGLE_MAPS_INITIAL_ZOOM];
 }
 
 #pragma mark - Search Bar
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
+    // Hide Keyboard
     [self.view endEditing:YES];
+    
+    // Start Seraching Process
     [self performSearchAction];
 }
 
@@ -123,8 +160,10 @@
 
 - (BOOL)isValidAirportICAOCodeWithString:(NSString *)string{
     
+    // Load Regexp Pattern
     NSString *pattern = AIRPORT_ICAO_CODE_PATTERN;
     
+    // Prepare Validation Error
     NSMutableDictionary *userInfo = [NSMutableDictionary new];
     NSString *errorLocalizedDescriptionString = @"ICAO Airport Code must contain 4 letters. Try again.";
     [userInfo setValue:errorLocalizedDescriptionString forKey:NSLocalizedDescriptionKey];
@@ -133,22 +172,26 @@
                                          code:0
                                      userInfo:userInfo];
 
-    
+    // Set Regexp
     NSRegularExpression *regularExpression = [NSRegularExpression regularExpressionWithPattern:pattern
                                                                                        options:0
                                                                                          error:&error];
+    // Validate Code
     NSArray  *validCodes = [regularExpression matchesInString:string
                                                       options:0
                                                         range:NSMakeRange(0, [string length])];
+    // Check if there is valid ICAO Code
     if ([validCodes count] > 0) {
         return YES;
     } else {
+        
+        // Present Validation Error
         [self presentErrorAlertWithError:error];
     }
     return NO;
 }
 
-#pragma mark – Keyboard
+#pragma mark - Keyboard
 
 - (void)keyboardWillChange:(NSNotification *)notification {
     
@@ -178,9 +221,14 @@
     [UIView setAnimationCurve:animationCurve];
     
     CGRect newFrame = self.view.frame;
+    
+    // Get Keyaboard Frame in the end of animation
     CGRect keyboardFrame = [self.view convertRect:keyboardEndFrame toView:nil];
     
+    // Move View up or down on height of Keyboard base on y position
     newFrame.origin.y -= keyboardFrame.size.height * (self.view.frame.origin.y < 0 ? -1 : 1);
+    
+    // Set new Frame for View
     self.view.frame = newFrame;
     
     [UIView commitAnimations];
@@ -189,35 +237,49 @@
 #pragma mark - NOTAM
 
 - (void)requestNOTAMForAirportICAOCodeWithString:(NSString *)string{
+    
+    // Crate NOTAM Binding
     notamBinding *binding = [notamService notamBinding];
     
+    // Set Reques String
     NSString *soapRequest = [NSString stringWithFormat:
                              NOTAM_REQUEST_STRING,
                              ROKET_ROUTE_LOGIN,
                              ROKET_ROUTE_PWORD,
                              string];
     
+    // Run NOTAM Request
     [binding getNotamAsyncUsingRequest:soapRequest
                               delegate:self];
 }
 
 - (void)setNOTAMMarkerWithItem:(Item *)item{
+    
+    // Create new Marker
     GMSMarker *marker = [GMSMarker new];
     
+    // Set Marker details from NOTAM Item
     marker.position = item.location.coordinate;
     marker.snippet = item.infoString;
+    
+    // Set icon and place Marker on Map
     marker.icon = [UIImage imageNamed:@"WarningIcon"];
     marker.map = self.mapView;
 }
 
-#pragma mark – NOTAM Binding Response Delegate
+#pragma mark - NOTAM Binding Response Delegate
 
 - (void)operation:(notamBindingOperation *)operation completedWithResponse:(notamBindingResponse *)response{
     DLog(@"Responce: %@", [response.bodyParts objectAtIndex:0]);
     
+    // Save Responce XML to NSData object in order to parse it
     NSData *responceXMLData = [response.bodyParts[0] dataUsingEncoding:NSASCIIStringEncoding];
+    
+    // Create Parser Instance
     NSXMLParser *parser = [[NSXMLParser alloc] initWithData:responceXMLData];
     parser.delegate = self;
+    
+    // Start parsing process
     [parser parse];
 }
 
@@ -254,6 +316,7 @@
         NSMutableDictionary *userInfo = [NSMutableDictionary new];
         [userInfo setValue:string forKey:NSLocalizedDescriptionKey];
         
+        // Save Error to show after Parser end XML Document
         self.parserError = [NSError errorWithDomain:@"NOTAM" code:self.parserError.code userInfo:userInfo];
     }
     
@@ -291,16 +354,27 @@
 }
 
 - (void)setNOTAMMarkersWithItemsArray:(NSArray *)array{
+    
+    // Check if there any NOTAM Items in Array
     if ([array count] !=0) {
+        
+        // Set NOTAM Markres on Map for every NOTAM in Array
         for (Item *item in array) {
+            
             [self setNOTAMMarkerWithItem:item];
+            
+            // Move Camera Postition to last NOTAM location
             if ([item isEqual:[array lastObject]]) {
-                [self setMapViewCameraPositionWithLocation:item.location andZoom:GOOGLE_MAPS_INITIAL_ZOOM];
+                
+                [self setMapViewCameraPositionWithLocation:item.location
+                                                   andZoom:GOOGLE_MAPS_INITIAL_ZOOM];
             }
         }
     } else {
+        
+        // Prepare Error for empty NOTAM on ICAO Code
         NSMutableDictionary *userInfo = [NSMutableDictionary new];
-        NSString *errorLocalizedDescriptionString = [NSString stringWithFormat:@"There is no NOTAM for %@ ICAO Airport Code. Try again.", self.searchBar.text];
+        NSString *errorLocalizedDescriptionString = [NSString stringWithFormat:@"There is no NOTAM for \"%@\" ICAO Airport Code. Try again.", self.searchBar.text];
         [userInfo setValue:errorLocalizedDescriptionString forKey:NSLocalizedDescriptionKey];
         
         NSError *error = [NSError errorWithDomain:@"NOTAM"
@@ -376,26 +450,32 @@
 #pragma mark - Alert
 
 - (void)presentErrorAlertWithError:(NSError *)error{
+    self.searchBar.text = @"";
+    
+    [self presentAlertWithTitle:ALERT_TITLE
+                         button:ALERT_BUTTON
+                     andMessage:error.localizedDescription];
+}
+
+- (void)presentAlertWithTitle:(NSString *)title button:(NSString *)button andMessage:(NSString *)message{
     if ([UIAlertController class]){
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:ALERT_TITLE
-                                                                             message:error.localizedDescription
-                                                                      preferredStyle:UIAlertControllerStyleAlert];
-    
-    UIAlertAction *buttonAction = [UIAlertAction actionWithTitle:ALERT_BUTTON
-                                                           style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
-                                                               self.searchBar.text = @"";
-                                                           }];
-    
-    [alertController addAction:buttonAction];
-    
-    [self presentViewController:alertController animated:YES completion:nil];
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title
+                                                                                 message:message
+                                                                          preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *buttonAction = [UIAlertAction actionWithTitle:button
+                                                               style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+                                                               }];
+        
+        [alertController addAction:buttonAction];
+        
+        [self presentViewController:alertController animated:YES completion:nil];
     } else {
-        UIAlertView * alert = [[UIAlertView alloc]initWithTitle:ALERT_TITLE
-                                                        message:error.localizedDescription
+        UIAlertView * alert = [[UIAlertView alloc]initWithTitle:title
+                                                        message:message
                                                        delegate:nil
-                                              cancelButtonTitle:ALERT_BUTTON
+                                              cancelButtonTitle:button
                                               otherButtonTitles:nil, nil];
-        self.searchBar.text = @"";
         [alert show];
     }
 }
