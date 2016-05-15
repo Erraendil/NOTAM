@@ -21,6 +21,8 @@
     // Set API Key for Google Maps 
     [GMSServices provideAPIKey:GOOGLE_MAPS_API_KEY];
     
+    [[UIApplication sharedApplication] setStatusBarHidden:YES];
+    
     return YES;
 }
 

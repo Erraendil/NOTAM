@@ -22,9 +22,7 @@
     
     // Init Location Manager
     [self initLocationManager];
-    
-    // Set Initial Position for Map View with Current Location Marker
-    [self initMapViewWithCurrentLocationMarker];
+    [self initMapViewWithCurrentLocation];
     
     self.searchBar.delegate = self;
     self.mapView.delegate = self;
@@ -51,13 +49,9 @@
 
 #pragma mark - Google Maps
 
-- (void)initMapViewWithCurrentLocationMarker{
-    // Save Current Location for future use
-    CLLocation *currentLocation = [self getCurrentLocation];
-    
-    [self setMapViewCameraPositionAndMarkerWithLocation:currentLocation
-                                                andZoom:GOOGLE_MAPS_INITIAL_ZOOM];
-    
+- (void)initMapViewWithCurrentLocation{
+    [self setMapViewCameraPositionWithLocation:[self getCurrentLocation]
+                                       andZoom:GOOGLE_MAPS_INITIAL_ZOOM];
 }
 
 - (CLLocation *)getCurrentLocation{
@@ -71,23 +65,11 @@
     return location;
 }
 
-- (void)setMapViewCameraPositionAndMarkerWithLocation:(CLLocation *)location andZoom:(NSNumber *)zoom{
-    [self setMapViewCameraPositionWithLocation:location andZoom:zoom];
-    [self setMapViewMarkerWithLocation:location];
-}
-
 - (void)setMapViewCameraPositionWithLocation:(CLLocation *)location andZoom:(NSNumber *)zoom{
     GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:location.coordinate.latitude
                                                             longitude:location.coordinate.longitude
                                                                  zoom:[zoom floatValue]];
     self.mapView.camera = camera;
-}
-
-- (void)setMapViewMarkerWithLocation:(CLLocation *)location{
-    GMSMarker *marker = [GMSMarker new];
-    marker.position = CLLocationCoordinate2DMake(location.coordinate.latitude,
-                                                 location.coordinate.longitude);
-    marker.map = self.mapView;
 }
 
 - (void)mapView:(GMSMapView *)mapView didTapAtCoordinate:(CLLocationCoordinate2D)coordinate{
@@ -101,13 +83,19 @@
         locationManager = [[CLLocationManager alloc] init];
         
         locationManager.delegate = self;
-        [locationManager requestWhenInUseAuthorization];
+        if ([locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
+            [locationManager requestWhenInUseAuthorization];
+        }
         
         locationManager.distanceFilter = kCLDistanceFilterNone;
         locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters; // 100 m
         
-        [locationManager startUpdatingLocation];
+        [locationManager startMonitoringSignificantLocationChanges];
     }
+}
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations{
+    [self setMapViewCameraPositionWithLocation:[locations lastObject] andZoom:GOOGLE_MAPS_INITIAL_ZOOM];
 }
 
 #pragma mark - Search Bar
@@ -120,12 +108,16 @@
 
 - (void)performSearchAction{
     if ([self isValidAirportICAOCodeWithString:self.searchBar.text]) {
+        
+        // Clera Map View to display new search results
         [self.mapView clear];
         self.items = [NSMutableArray new];
+        
+        // Display progress hud
         [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        
+        // Perfor NOTAM request
         [self requestNOTAMForAirportICAOCodeWithString:self.searchBar.text];
-    } else {
-        self.searchBar.text = @"";
     }
 }
 
@@ -209,6 +201,15 @@
                               delegate:self];
 }
 
+- (void)setNOTAMMarkerWithItem:(Item *)item{
+    GMSMarker *marker = [GMSMarker new];
+    
+    marker.position = item.location.coordinate;
+    marker.snippet = item.infoString;
+    marker.icon = [UIImage imageNamed:@"WarningIcon"];
+    marker.map = self.mapView;
+}
+
 #pragma mark – NOTAM Binding Response Delegate
 
 - (void)operation:(notamBindingOperation *)operation completedWithResponse:(notamBindingResponse *)response{
@@ -220,20 +221,17 @@
     [parser parse];
 }
 
-#pragma mark - NOTAM XML Parser
-
 #pragma mark - NSXML Parser Delegate Methods
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict{
+    
+    // Save Current XML Elemet to work with
     self.currentXMLElement = elementName;
-    DLog(@"Current Elemt: %@", self.currentXMLElement);
-}
-
-- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName{
-    self.currentXMLElement = @"";
 }
 
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string{
+    
+    // Pocessing Responce Status
     if ([self.currentXMLElement isEqualToString:@"RESULT"])
     {
         NSNumberFormatter *numberFormatter = [NSNumberFormatter new];
@@ -241,6 +239,8 @@
         NSNumber *resultNumber = [numberFormatter numberFromString:string];
         
         if ([resultNumber integerValue] != 0) {
+            
+            // Prepare Responce Error Code
             NSMutableDictionary *userInfo = [NSMutableDictionary new];
             [userInfo setValue:@"Unknown error!" forKey:NSLocalizedDescriptionKey];
             
@@ -249,12 +249,15 @@
             self.parserError = nil;
         }
     } else if ([self.currentXMLElement isEqualToString:@"MESSAGE"]) {
+        
+        // Prepare Responce Error Message
         NSMutableDictionary *userInfo = [NSMutableDictionary new];
         [userInfo setValue:string forKey:NSLocalizedDescriptionKey];
         
         self.parserError = [NSError errorWithDomain:@"NOTAM" code:self.parserError.code userInfo:userInfo];
     }
     
+    // Processing NOTAM Item Coordinates and Info
     if ([self.currentXMLElement isEqualToString:@"ItemQ"]) {
         
         Item *newItem = [Item new];
@@ -267,12 +270,24 @@
     }
 }
 
-- (void) parserDidEndDocument:(NSXMLParser *)parser{
-    self.parserError ? [self presentErrorAlertWithError:self.parserError] : DLog(@"Items: %@", self.items);
+- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName{
     
-    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+    // Clear Current XML Elemet
+    self.currentXMLElement = @"";
+}
+
+- (void) parserDidEndDocument:(NSXMLParser *)parser{
+    
+    // Check if there were Error
+    if (self.parserError){
+        [self presentErrorAlertWithError:self.parserError];
+    }
+    
+    // Place NOTAM Markers on Map
     [self setNOTAMMarkersWithItemsArray:self.items];
     
+    // Remove Progress HUD after processing XML Responce
+    [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
 }
 
 - (void)setNOTAMMarkersWithItemsArray:(NSArray *)array{
@@ -284,16 +299,16 @@
             }
         }
     } else {
-        // Place here an Alert!
+        NSMutableDictionary *userInfo = [NSMutableDictionary new];
+        NSString *errorLocalizedDescriptionString = [NSString stringWithFormat:@"There is no NOTAM for %@ ICAO Airport Code. Try again.", self.searchBar.text];
+        [userInfo setValue:errorLocalizedDescriptionString forKey:NSLocalizedDescriptionKey];
+        
+        NSError *error = [NSError errorWithDomain:@"NOTAM"
+                                             code:0
+                                         userInfo:userInfo];
+        
+        [self presentErrorAlertWithError:error];
     }
-}
-
-- (void)setNOTAMMarkerWithItem:(Item *)item{
-    GMSMarker *marker = [GMSMarker new];
-    marker.position = item.location.coordinate;
-    marker.snippet = item.infoString;
-    marker.icon = [UIImage imageNamed:@"WarningIcon"];
-    marker.map = self.mapView;
 }
 
 #pragma mark - Location Formatting
@@ -361,18 +376,28 @@
 #pragma mark - Alert
 
 - (void)presentErrorAlertWithError:(NSError *)error{
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Error!"
+    if ([UIAlertController class]){
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:ALERT_TITLE
                                                                              message:error.localizedDescription
                                                                       preferredStyle:UIAlertControllerStyleAlert];
     
-    UIAlertAction *buttonAction = [UIAlertAction actionWithTitle:@"Ok"
+    UIAlertAction *buttonAction = [UIAlertAction actionWithTitle:ALERT_BUTTON
                                                            style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
-                                                               // Add Button Action here
+                                                               self.searchBar.text = @"";
                                                            }];
     
     [alertController addAction:buttonAction];
     
     [self presentViewController:alertController animated:YES completion:nil];
+    } else {
+        UIAlertView * alert = [[UIAlertView alloc]initWithTitle:ALERT_TITLE
+                                                        message:error.localizedDescription
+                                                       delegate:nil
+                                              cancelButtonTitle:ALERT_BUTTON
+                                              otherButtonTitles:nil, nil];
+        self.searchBar.text = @"";
+        [alert show];
+    }
 }
 
 

@@ -39,6 +39,11 @@ return _sharedObject;\
 
 #define AIRPORT_ICAO_CODE_PATTERN @"^[A-z]{4}$"
 
+#pragma mark - Alerts
+
+#define ALERT_TITLE @"Error!"
+#define ALERT_BUTTON @"Ok"
+
 #pragma mark – NOTAM
 
 #define ROKET_ROUTE_LOGIN @"kos.bilyk@gmail.com"
